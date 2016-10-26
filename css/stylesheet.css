@@ -1,0 +1,44 @@
+body {
+    margin: 20px;
+}
+
+h1 {
+    padding-bottom: 15px;
+}
+
+.container {
+    max-width: 680px;
+}
+
+.input-select {
+    max-width: 200px;
+}
+
+.form-control:focus {
+    border-color: rgba(82,168,236,.8);
+    box-shadow: 0 0 8px rgba(82,168,236,.6);
+    outline: 0;
+}
+
+.content-box {
+    margin-top: 35px;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    background-color: #f7f7f9;
+    border: 1px solid #e1e1e8;
+    border-radius: 4px;
+}
+
+.fieldValue {
+    color: black;
+}
+
+.fieldValue label {
+    width: 130px;
+}
+
+.form-submitted {
+    color: #d44950;
+    font-size: 18px;
+}
+

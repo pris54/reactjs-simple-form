@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ReactJS: Form exercise</title>
+    <link rel="stylesheet" href="css/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/stylesheet.css"/>
+    <script src="build/react.js"></script>
+    <script src="build/react-with-addons.js"></script>
+    <script src="build/react-dom.js"></script>
+    <script src="babel/browser.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/babel">
+        var ContactForm = React.createClass({
+            formFieldsSetup: {
+                firstName: {
+                    label: 'First name',
+                    type: 'string',
+                    defaultValue: '',
+                    formMethod: 'formInput'
+                },
+                lastName: {
+                    label: 'Last name',
+                    type: 'string',
+                    defaultValue: '',
+                    formMethod: 'formInput'
+                },
+                emailAddress: {
+                    label: 'Email address',
+                    type: 'string',
+                    defaultValue: '',
+                    formMethod: 'formInput'
+                },
+                postalAddress: {
+                    label: 'Postal address',
+                    type: 'string',
+                    defaultValue: '',
+                    formMethod: 'formTextarea'
+                },
+                preferredContact: {
+                    label: 'Contact method',
+                    type: 'string',
+                    defaultValue: 'Email',
+                    formMethod: 'formDropdown',
+                    options: [ 'Email', 'Phone' ]
+                }
+            },
+            submitMessage: '',
+
+            PropTypes: function() {
+                var formFieldsSetup = this.formFieldsSetup;
+                return {
+                    propTypes() {
+                        var propTypesVar = {};
+                        Object.keys(formFieldsSetup).map(function (fieldKey) {
+                            propTypesVar[fieldKey] = React.PropTypes[formFieldsSetup[fieldKey].type];
+                        });
+                        return propTypesVar;
+                    }
+                };
+            },
+
+            getInitialState: function() {
+                var formFieldsSetup = this.formFieldsSetup;
+                var props = this.props;
+
+                return {
+                    initialState() {
+                        var initialStateVar = {};
+                        Object.keys(formFieldsSetup).map(function (fieldKey) {
+                            initialStateVar[fieldKey] = props[fieldKey] || formFieldsSetup[fieldKey].defaultValue;
+                        });
+                        return initialStateVar;
+                    }
+                };
+            },
+
+            handleChange: function(e) {
+                function constructor() {
+                    return {
+                        [e.target.getAttribute('name')]: this.props[e.target.getAttribute('name')] || ''
+                    }
+                }
+                this.setState({[e.target.getAttribute('name')]: e.target.value});
+            },
+
+            handleSubmit: function(e) {
+                e.preventDefault();
+                this.setState({submitMessage: 'Form submitted'});
+            },
+
+            formInput: function(fieldName, fieldLabel) {
+                return (
+                    <div>
+                        <label>{fieldLabel}</label>
+                        <input className="form-control"
+                               name={fieldName}
+                               value={this.state[fieldName] || ''}
+                               onChange={this.handleChange}
+                        />
+                    </div>
+                );
+            },
+
+            formTextarea: function(fieldName, fieldLabel) {
+                return (
+                    <div>
+                        <label>{fieldLabel}</label>
+                        <textarea className="form-control"
+                                  name={fieldName}
+                                  value={this.state[fieldName] || ''}
+                                  onChange={this.handleChange}/>
+                    </div>
+                );
+            },
+
+            formDropdown: function(fieldName, fieldLabel, fieldOptions) {
+                return (
+                    <div>
+                        <label>{fieldLabel}</label>
+                        <select className="form-control input-select"
+                                name={fieldName}
+                                value={this.state[fieldName]}
+                                onChange={this.handleChange}
+                        >
+
+                            <option value="Email">Email</option>
+                            <option value="Phone">Phone</option>
+                        </select>
+                    </div>
+                );
+            },
+
+            formOutput: function (items) {
+                var formFieldsSetup = this.formFieldsSetup;
+                return (
+                    <div className="content-box">
+                        {Object.keys(formFieldsSetup).map(function (fieldKey) {
+                            return <div className="fieldValue"><label>{formFieldsSetup[fieldKey].label}</label>{items[fieldKey] || formFieldsSetup[fieldKey].defaultValue || '-'}</div>
+                        })}
+                    </div>
+                );
+            },
+
+            render: function() {
+                return (
+                    <div className="container">
+                        <h1>ReactJS: Form exercise</h1>
+                        <form name="contactForm" onSubmit={this.handleSubmit}>
+                            <div className="form-group">{this.formInput('firstName', 'First name')}</div>
+                            <div className="form-group">{this.formInput('lastName', 'Last name')}</div>
+                            <div className="form-group">{this.formInput('emailAddress', 'Email address')}</div>
+                            <div className="form-group">{this.formTextarea('postalAddress', 'Address')}</div>
+                            <div className="form-group">{this.formDropdown('preferredContact', 'Preferred contact form')}</div>
+                            <div className="form-group"><button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button></div>
+                        </form>
+                        <div>{this.formOutput(this.state)}</div>
+                        <h3 className="form-submitted">{this.state.submitMessage}</h3>
+                    </div>
+                );
+            }
+        });
+
+        ReactDOM.render(<ContactForm />, document.getElementById('app'));
+    </script>
+</body>
+</html>
